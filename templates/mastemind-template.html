@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+@media screen and (max-width: 1080px) and (min-width: 520px) {
+  form {
+    font-size:24pt;
+    text-align:center;
+    margin:auto;
+    width:100%;
+  }
+  .prev {
+    text-align:center;
+    width:100%;
+  }
+
+  .nummera {
+    font-size:24pt;
+  }
+
+  .svar {
+    font-size:18pt;
+  }
+
+  input{
+    width:40%;
+    margin-top:2%;
+    text-align:center;
+    border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+  }
+
+  #submit{
+    height:100px;
+    font-size:18pt;
+  }
+
+}
+
+@media screen and (min-width: 1081px) {
+  form {
+    text-align:center;
+    margin:auto;
+    float:left;
+    border-right:1px solid;
+    width:49%;
+  }
+
+  .prev {
+    text-align:center;
+    float:right;
+    position:relative;
+    width:50%;
+  }
+
+  .nummera {
+    font-size:11pt;
+  }
+
+  .svar {
+    font-size:12pt;
+  }
+
+  input{
+    width:40%;
+    text-align:center;
+    margin-top:2%;
+    border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+  }
+
+}
+
+body{
+  margin-top:20px;
+  height:100vh;
+  background-image: {{ url_for('static', filename='snow.jpg')}};
+  background-size: cover;
+  color: #fe921f;
+  font-family: "Trocchi", serif;
+}
+
+.label{
+  float:left;
+  width:20%;
+  padding-left:4%;
+}
+
+#submit{
+  height:50px;
+  font-size:11pt;
+  margin-top:10%;
+  margin-bottom:10%;
+  background-color:#b3e0ff;
+  font-weight: bold;
+  color:#fe921f;
+}
+
+a{
+  color:#5cb85c;
+}
+
+</style>
+</head>
+<body>
+
+
+<form method="POST", action="/mastermind/">
+      <h1>Hva ligger i boksen</h1>
+      <p style="margin-bottom:50px;">Gjett 4 nummer fra 0-9 og se om du har det samme som komputeren:</p>
+
+      <label class="label"><span class="field">Nummer1:</span></br><input class="nummera" type="text" name="guessnumber1" value="{{request.form.guessnumber1}}"pattern="[0-9]" placeholder="Tast inn" /></label>
+      <label class="label"><span class="field">Nummer2:</span></br><input class="nummera" type="text" name="guessnumber2" value="{{request.form.guessnumber2}}"pattern="[0-9]" placeholder="Tast inn" /></label>
+      <label class="label"><span class="field">Nummer3:</span></br><input class="nummera" type="text" name="guessnumber3" value="{{request.form.guessnumber3}}"pattern="[0-9]" placeholder="Tast inn" /></label>
+      <label class="label"><span class="field">Nummer4:</span></br><input class="nummera" type="text" name="guessnumber4" value="{{request.form.guessnumber4}}"pattern="[0-9]" placeholder="Tast inn" /></label>
+
+      <p><input type="hidden" name="answer1" value={{answer_list[0]|safe}}></p>
+      <p><input type="hidden" name="answer2" value={{answer_list[1]|safe}}></p>
+      <p><input type="hidden" name="answer3" value={{answer_list[2]|safe}}></p>
+      <p><input type="hidden" name="answer4" value={{answer_list[3]|safe}}></p>
+      <p><input type="hidden" name="guesses" value={{number_of_guess|safe}}></p>
+      <input id="submit" type="submit" value="Sjekk om du gjetta rett" formmethod="post">
+
+      <p><input type="hidden" name="prev1" value={{prev_guess[0]}}></p>
+      <p><input type="hidden" name="prev2" value={{prev_guess[1]}}></p>
+      <p><input type="hidden" name="prev3" value={{prev_guess[2]}}></p>
+      <p><input type="hidden" name="prev4" value={{prev_guess[3]}}></p>
+      <p><input type="hidden" name="match" value={{matches|string}}></p>
+      <p><input type="hidden" name="almost" value={{part_match|string}}></p>
+
+      {% if flag %}
+      {% if matches|safe == "4" %}
+            <h3 style='color:#5cb85c'>Gratulerer du har alle " {{matches|string}} " tallene riktig på {{number_of_guess|safe}} forsøk! </h3> <h3><a href="">Spille igjen</a></h3>
+            <img src="{{ url_for('static', filename='bunny.jpg')}}" alt='bunny' style='width:60px;height:80px;'>
+      {% else %}
+
+            <p>Rett nummer og plass: <span style='color: black'> {{matches|string}} </span></p>
+            <p>Rett nummer feil plass: <span style='color: black'> {{part_match|string}} </span></p>
+
+            <p>Antall tippinger: <span style='color: black'> {{number_of_guess|safe}} </span></p></form>
+            <div class='prev'>
+            <p class='svar'><strong> Dine nummer: </strong></p>
+            {% for digit in range(0,prev_guess[0]|length-1) %}
+                  <p class='svar'>  Nummer1: <span style='color: black'> {{prev_guess[0][digit]|safe}} </span>  Nummer2: <span style='color: black'> {{prev_guess[1][digit]|safe}} </span>  Nummer3: <span style='color: black'> {{prev_guess[2][digit]|safe}} </span>  Nummer4: <span style='color: black'> {{prev_guess[3][digit]|safe}} </span>  Match: <span style='color: black'> {{matches|string}} </span>  Partmatch: <span style='color: black'> {{part_match|string}} </span></p>
+            {% endfor %}
+            </div>
+      {% endif %}
+      {% else %}
+            <p>Skriv in 4 tall i vinudene over: <b>Nummer1 Nummer2 Nummer3 og Nummer4</b></p>
+      {% endif %}
+</form>
+
+</body></html>
