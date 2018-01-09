@@ -11,8 +11,8 @@ app = Flask(__name__)
 """ Generate random numbers. Populate answer lists & set number of guesses to zero """
 def random_answer_list():
 
-            del answer_list[:]
-            answer_list.extend([random.randint(1,9),random.randint(1,9),random.randint(1,9),random.randint(1,9)])
+    del answer_list[:]
+    answer_list.extend([random.randint(1,9),random.randint(1,9),random.randint(1,9),random.randint(1,9)])
 
 
 def count_guess():
